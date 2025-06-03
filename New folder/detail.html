@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Detail UMKM</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-gray-100 font-sans">
+	<div class="max-w-6xl mx-auto p-8 bg-white shadow-xl rounded-xl mt-10">
+		<a href="index.html" class="text-blue-600 hover:underline text-sm mb-4 inline-block">&larr; Kembali ke Daftar
+			UMKM</a>
+		<div id="umkmDetail" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+			<!-- Bagian teks di kiri, foto di kanan -->
+			<div>
+				<h1 id="name" class="text-3xl font-bold mb-2">Nama UMKM</h1>
+				<h3 id="owner" class="text-xl text-gray-600 mb-4">Pemilik: </h3>
+				<p id="description" class="mb-4 text-gray-800 leading-relaxed"></p>
+				<div class="text-yellow-500 font-semibold mb-3" id="rating"></div>
+
+				<h3 class="text-lg font-semibold mt-4 mb-1">Alamat:</h3>
+				<p id="address" class="mb-4 text-gray-700"></p>
+
+				<h3 class="text-lg font-semibold mt-6 mb-2">Sosial Media:</h3>
+				<div id="socialLinks" class="flex flex-col gap-2 text-blue-600 text-sm"></div>
+			</div>
+
+			<!-- Galeri foto -->
+			<div id="gallery" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+				<!-- Foto-foto akan dimuat di sini -->
+			</div>
+		</div>
+	</div>
+
+	<script>
+		const umkmData = {
+			1: {
+				name: "UMKM A",
+				owner: "Andi Mira",
+				description: "UMKM A bergerak di bidang makanan tradisional khas Kalimantan dengan bahan alami dan resep turun-temurun.",
+				photos: [
+					"https://images.unsplash.com/photo-1564758866812-81b2d5e227b3?auto=format&fit=crop&w=600&q=80",
+					"https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80",
+					"https://images.unsplash.com/photo-1572564341077-cb63acfa70a2?auto=format&fit=crop&w=600&q=80"
+				],
+				rating: 4.5,
+				address: "Jl. Merdeka No.10, RT 03, Kota Samarinda",
+				whatsapp: "6281234567890",
+				social: {
+					whatsapp: "https://wa.me/6281234567890",
+					instagram: "https://instagram.com/umkm_a",
+					facebook: "https://facebook.com/umkm_a"
+				}
+			},
+			2: {
+				name: "UMKM B",
+				owner: "Budi Santoso",
+				description: "UMKM B menyediakan kerajinan tangan berkualitas dari bahan bambu dan rotan yang ramah lingkungan.",
+				photos: [
+					"https://images.unsplash.com/photo-1519744792095-2f2205e87b6f?auto=format&fit=crop&w=600&q=80",
+					"https://images.unsplash.com/photo-1564518098550-9bdbb2d8e0bd?auto=format&fit=crop&w=600&q=80"
+				],
+				rating: 4.2,
+				address: "Jl. Sudirman No.5, RT 05, Kota Balikpapan",
+				whatsapp: "6289876543210",
+				social: {
+					whatsapp: "https://wa.me/6289876543210",
+					instagram: "https://instagram.com/umkm_b"
+				}
+			},
+			3: {
+				name: "UMKM C",
+				owner: "Citra Dewi",
+				description: "UMKM C menawarkan produk fashion modern dengan sentuhan motif khas Kalimantan.",
+				photos: [
+					"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+					"https://images.unsplash.com/photo-1586769852836-bc069f19e1c7?auto=format&fit=crop&w=600&q=80"
+				],
+				rating: 4.7,
+				address: "Jl. Diponegoro No.7, RT 01, Kota Bontang",
+				whatsapp: "6281122334455",
+				social: {
+					whatsapp: "https://wa.me/6281122334455",
+					instagram: "https://instagram.com/umkm_c"
+				}
+			}
+		};
+
+		const params = new URLSearchParams(window.location.search);
+		const umkmId = params.get('id');
+		const umkm = umkmData[umkmId];
+
+		if (!umkm) {
+			alert("UMKM tidak ditemukan!");
+			window.location.href = "index.html";
+		} else {
+			document.getElementById("name").textContent = umkm.name;
+			document.getElementById("owner").textContent = "Pemilik: " + umkm.owner;
+			document.getElementById("description").textContent = umkm.description;
+			document.getElementById("rating").textContent = `Rating: ${umkm.rating} ★`;
+			document.getElementById("address").textContent = umkm.address;
+
+			const socialLinks = document.getElementById("socialLinks");
+			const icons = {
+				whatsapp: "fab fa-whatsapp",
+				instagram: "fab fa-instagram",
+				facebook: "fab fa-facebook"
+			};
+			for (const [platform, url] of Object.entries(umkm.social)) {
+				const link = document.createElement("a");
+				link.href = url;
+				link.target = "_blank";
+				link.className = "flex items-center gap-2 hover:underline";
+				link.innerHTML = `<i class='${icons[platform]}'></i> ${platform.charAt(0).toUpperCase() + platform.slice(1)}`;
+				socialLinks.appendChild(link);
+			}
+
+			const gallery = document.getElementById("gallery");
+			umkm.photos.forEach(photoUrl => {
+				const img = document.createElement("img");
+				img.src = photoUrl;
+				img.className = "rounded-lg shadow-md object-cover w-full h-48";
+				gallery.appendChild(img);
+			});
+		}
+	</script>
+</body>
+
+</html>
